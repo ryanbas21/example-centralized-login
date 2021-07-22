@@ -21,9 +21,9 @@ Example app using sdk for basic use
 - [ ] Once logged in, display a functional logout button that uses the SessionManager to logout the user
 - [ ] Once logged out, display the same login form from above
  
-- [  ] Add an OAuth flow to the basic username-password from above:
-- [  ] After successful login, use the SDK's getTokens to call an OAuth client to get access token and id token
-- [  ] After getting tokens, use the SDK's getUserInfo to call the userinfo endpoint
+- [ ] Add an OAuth flow to the basic username-password from above:
+- [ ] After successful login, use the SDK's getTokens to call an OAuth client to get access token and id token
+- [ ] After getting tokens, use the SDK's getUserInfo to call the userinfo endpoint
 - [ ] Render user info to screen
 - [ ] Using the logout button from the previous task, refactor to use FRUser to logout both session and OAuth tokens
 
