@@ -35,11 +35,11 @@ Using the logout button from the previous task, refactor to use FRUser to logout
 - [x] Don't over-engineer it; keep it simple
 
 - [] Refactor your form and authentication flow to be callback driven
-- [] Change your authentication tree to include the following:
-- [] Page node with Username and Password Collector
-- [] Choice node with a "Are you human? Yes or no?" If yes, success; if no, fail
-- [] Configure the SDK at application initialization
-- [] Call AM for initial callbacks in tree before rendering login form
+- [x] Change your authentication tree to include the following:
+- [x] Page node with Username and Password Collector
+- [x] Choice node with a "Are you human? Yes or no?" If yes, success; if no, fail
+- [x] Configure the SDK at application initialization
+- [x] Call AM for initial callbacks in tree before rendering login form
 
 - [] Render the login form components from the callback metadata
 - [] Labels from the `prompt` property
