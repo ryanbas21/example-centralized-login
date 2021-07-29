@@ -1,21 +1,8 @@
-import { FRStep, FRUser } from '@forgerock/javascript-sdk/lib';
+import { FRUser } from '@forgerock/javascript-sdk';
 import { useState } from 'react';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
-import { Config } from '@forgerock/javascript-sdk/lib';
+import { Redirect } from 'react-router-dom';
 
-Config.set({
-  clientId: 'test-app-1',
-  redirectUri: 'https://ryan.example.com:1234/_callback',
-  scope: 'openid',
-  serverConfig: {
-    baseUrl: 'https://openam-ryan-bas.forgeblocks.com/am/',
-    timeout: 5000,
-  },
-  realmPath: 'alpha',
-  tree: 'sdkAuthenticationTree',
-});
-
-export default (props: RouteComponentProps<any>) => {
+export default () => {
   const [redirect, setRedirect] = useState(false);
 
   const handleClick = async (_e: any): Promise<void> => {

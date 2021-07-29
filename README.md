@@ -34,17 +34,17 @@ Using the logout button from the previous task, refactor to use FRUser to logout
 - [x] Make sure the all previous features work as expected after refactoring
 - [x] Don't over-engineer it; keep it simple
 
-- [] Refactor your form and authentication flow to be callback driven
+- [x] Refactor your form and authentication flow to be callback driven
 - [x] Change your authentication tree to include the following:
 - [x] Page node with Username and Password Collector
 - [x] Choice node with a "Are you human? Yes or no?" If yes, success; if no, fail
 - [x] Configure the SDK at application initialization
 - [x] Call AM for initial callbacks in tree before rendering login form
 
-- [] Render the login form components from the callback metadata
-- [] Labels from the `prompt` property
-- [] Inputs from callback type
-- [] Handle the additional step with the `ChoiceCallback` using recursion, looping, etc.: essentially, keep calling next and render form elements until you get a success or failure
+- [x] Render the login form components from the callback metadata
+- [x] Labels from the `prompt` property
+- [x] Inputs from callback type
+- [x] Handle the additional step with the `ChoiceCallback` using recursion, looping, etc.: essentially, keep calling next and render form elements until you get a success or failure
 - [] Introduce a link or button that allows the user to do Centralized Login
 - [] Introduce a link or button that allows the user to do Centralized Login
 - [] Create a button on the page that says “Login via Platform” (essentially the user has a choice between using the embedded login, what you've already built, or with centralized login, what you will build)

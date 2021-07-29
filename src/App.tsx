@@ -9,23 +9,13 @@ import {
   TokenManager,
   UserManager,
   CallbackType,
-  Config,
 } from '@forgerock/javascript-sdk';
-
-import './App.css';
 import { Redirect } from 'react-router-dom';
 
-Config.set({
-  clientId: 'test-app-1',
-  redirectUri: 'https://ryan.example.com:1234/_callback',
-  scope: 'openid',
-  serverConfig: {
-    baseUrl: 'https://openam-ryan-bas.forgeblocks.com/am/',
-    timeout: 5000,
-  },
-  realmPath: 'alpha',
-  tree: 'sdkAuthenticationTree',
-});
+import AreYouHuman from './components/AreYouHuman';
+import UsernameFields from './components/Username';
+import PasswordField from './components/Password';
+import './App.css';
 
 function handleFatalError(err: Error) {
   console.log('we hit an error', err);
@@ -36,7 +26,19 @@ function App() {
   const [step, setStep] = useState();
   const [username, setUsername] = useState('');
   const [human, setHuman] = useState(1);
-  const [data, setData] = useState({ callbacks: [] });
+  const [data, setData] = useState<{
+    callbacks: any[];
+    payload: {
+      header: string;
+      description: string;
+    };
+  }>({
+    payload: {
+      header: '',
+      description: '',
+    },
+    callbacks: [],
+  });
   const [pw, setPw] = useState('');
   const [error, setError] = useState();
   const [redirect, setRedirect] = useState(null);
@@ -44,7 +46,6 @@ function App() {
   const handleStep = async (step: FRStep | FRLoginFailure | FRLoginSuccess) => {
     if (!step.type) return;
 
-    console.log(step.type);
     switch (step.type) {
       case 'LoginSuccess': {
         try {
@@ -79,13 +80,12 @@ function App() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
     if (data.callbacks[0].payload.type === 'ChoiceCallback') {
       const choiceCallback = (step as unknown as FRStep).getCallbackOfType(
         CallbackType.ChoiceCallback,
       );
-      console.log('human value', human);
       choiceCallback.setInputValue(human);
-      // setData({ callbacks: [] });
     } else {
       const nameCallback = (step as unknown as FRStep).getCallbackOfType(CallbackType.NameCallback);
       const passwordCallback = (step as unknown as FRStep).getCallbackOfType(
@@ -104,98 +104,42 @@ function App() {
     nextStep();
   }, []);
 
-  const componentMap: Record<string, JSX.Element> = {
-    PasswordCallback: <PasswordField pw={pw} setPw={setPw} />,
-    NameCallback: <UsernameFields username={username} setUsername={setUsername} />,
-    ChoiceCallback: <AreYouHuman human={human} setHuman={setHuman} />,
+  const componentMap: Record<string, (a: any) => JSX.Element> = {
+    PasswordCallback: (props: any) => (
+      <PasswordField key={props.type} pw={pw} setPw={setPw} {...props} />
+    ),
+    NameCallback: (props: any) => (
+      <UsernameFields key={props.type} username={username} setUsername={setUsername} {...props} />
+    ),
+    ChoiceCallback: (props: any) => (
+      <AreYouHuman key={props.type} human={human} setHuman={setHuman} {...props} />
+    ),
   };
+
   if (error) return <div>Login Error</div>;
   if (redirect) return <Redirect push to="/success" />;
-  if (data && !data.callbacks) return 'Logging In...';
-  if (data && data.callbacks && !data.callbacks.length) return 'loading...';
+  if (data && !data.callbacks) return <>Logging In...</>;
+  if (data && data.callbacks && !data.callbacks.length) return <>Loading...</>;
+
+  console.log(data);
 
   return (
     <div className="App">
+      <h1 id="heading">{data.payload.header}</h1>
       <form id="my-form" onSubmit={handleSubmit}>
         <div id="Error">{error}</div>
         <div className="mb-2" id="UsernamePassword">
           {data &&
             data.callbacks
-              .map((v: { payload: { type: string } }) => {
-                console.log('type', v.payload.type);
-                return componentMap[v.payload.type];
-              })
+              .map((v: { payload: { type: string } }) => componentMap[v.payload.type](v))
               .reverse()}
           <button type="submit" className="btn btn-primary">
             Login
           </button>
+          <div dangerouslySetInnerHTML={{ __html: data.payload.description }}></div>
         </div>
       </form>
     </div>
-  );
-}
-
-interface AreYouHumanProps {
-  human: number;
-  setHuman: any;
-}
-function AreYouHuman({ human, setHuman }: AreYouHumanProps) {
-  return (
-    <div>
-      <label htmlFor={'Yes'}>Yes</label>
-      <input
-        id="Yes"
-        checked={!Boolean(human)}
-        type="radio"
-        value={0}
-        onClick={() => setHuman(0)}
-      />
-
-      <label htmlFor={'No'}>No</label>
-      <input id="No" checked={Boolean(human)} type="radio" value={1} onClick={() => setHuman(1)} />
-    </div>
-  );
-}
-
-interface PasswordProps {
-  pw: string;
-  setPw: (a: string) => void;
-}
-function PasswordField({ pw, setPw }: PasswordProps) {
-  return (
-    <>
-      <label className="form-label" htmlFor="password">
-        Password
-      </label>
-      <input
-        className="form-control"
-        type="password"
-        id="password"
-        value={pw}
-        onChange={(e) => setPw(e.target.value)}
-      />
-    </>
-  );
-}
-
-interface UsernameProps {
-  username: string;
-  setUsername: (a: string) => void;
-}
-function UsernameFields({ username, setUsername }: UsernameProps) {
-  return (
-    <>
-      <label className="form-label" htmlFor="username">
-        Username
-      </label>
-      <input
-        className="form-control"
-        type="text"
-        id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-    </>
   );
 }
 
