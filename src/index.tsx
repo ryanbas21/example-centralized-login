@@ -11,7 +11,7 @@ import { Config } from '@forgerock/javascript-sdk';
 
 Config.set({
   clientId: 'test-app-1',
-  support: 'modern',
+  support: 'legacy',
   redirectUri: 'https://ryan.example.com:1234/_callback',
   scope: 'openid',
   serverConfig: {
