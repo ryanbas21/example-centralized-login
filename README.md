@@ -46,10 +46,10 @@ Using the logout button from the previous task, refactor to use FRUser to logout
 - [x] Inputs from callback type
 - [x] Handle the additional step with the `ChoiceCallback` using recursion, looping, etc.: essentially, keep calling next and render form elements until you get a success or failure
 - [x] Introduce a link or button that allows the user to do Centralized Login
-- [] Create a button on the page that says “Login via Platform” (essentially the user has a choice between using the embedded login, what you've already built, or with centralized login, what you will build)
-- [] Configure a new OAuth2 client in AM with “implied consent” disabled (aka enforcing consent)
+- [x] Create a button on the page that says “Login via Platform” (essentially the user has a choice between using the embedded login, what you've already built, or with centralized login, what you will build)
+- [x] Configure a new OAuth2 client in AM with “implied consent” disabled (aka enforcing consent)
 
-- [] The new button from above initiates the Centralized Login flow that uses the new OAuth client you just created, leveraging the standard Authorization Code Flow of the OAuth 2 standard
+- [x] The new button from above initiates the Centralized Login flow that uses the new OAuth client you just created, leveraging the standard Authorization Code Flow of the OAuth 2 standard
 - [] Ensure consent is enforced
-- [] Handle the redirect back to your app and complete the OAuth flow using the provided authorization code and state provided in the redirect URL
-- [] Ensure both flows, embedded login and centralized login, are error/bug free
+- [x] Handle the redirect back to your app and complete the OAuth flow using the provided authorization code and state provided in the redirect URL
+- [x] Ensure both flows, embedded login and centralized login, are error/bug free

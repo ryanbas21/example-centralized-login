@@ -9,10 +9,9 @@ function UsernameFields({
   ...props
 }: UsernameProps & { [key: string]: any }) {
   return (
-    <>
+    <span>
       <label className="form-label" htmlFor="username">
         {props.payload.output[0].value}
-      </label>
       <input
         name={props.payload.input[0].name}
         className="form-control"
@@ -21,7 +20,8 @@ function UsernameFields({
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
-    </>
+      </label>
+    </span>
   );
 }
 

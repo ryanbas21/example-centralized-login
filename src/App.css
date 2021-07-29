@@ -1,7 +1,22 @@
 .App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  flex-direction: column;
 }
 
+#my-form {
+  margin: 40px;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  width: 200px;
+  height: 200px;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

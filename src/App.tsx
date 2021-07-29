@@ -50,7 +50,7 @@ function App() {
     switch (step.type) {
       case 'LoginSuccess': {
         try {
-          const tokens = await TokenManager.getTokens({
+          await TokenManager.getTokens({
             forceRenew: true,
             login: 'redirect',
           });
@@ -140,9 +140,11 @@ function App() {
         <button type="submit" className="btn btn-primary">
           Login
         </button>
-        {<div dangerouslySetInnerHTML={{ __html: data.payload.description }}></div>}
+        {<span dangerouslySetInnerHTML={{ __html: data.payload.description }}></span>}
       </form>
-      <h3>Or</h3>
+      <span>
+	<h3>Or</h3>
+      </span>
       <LoginViaPlatform setRedirect={setRedirect} />
     </div>
   );
