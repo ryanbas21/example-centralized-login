@@ -50,6 +50,6 @@ Using the logout button from the previous task, refactor to use FRUser to logout
 - [x] Configure a new OAuth2 client in AM with “implied consent” disabled (aka enforcing consent)
 
 - [x] The new button from above initiates the Centralized Login flow that uses the new OAuth client you just created, leveraging the standard Authorization Code Flow of the OAuth 2 standard
-- [] Ensure consent is enforced
+- [x] Ensure consent is enforced
 - [x] Handle the redirect back to your app and complete the OAuth flow using the provided authorization code and state provided in the redirect URL
 - [x] Ensure both flows, embedded login and centralized login, are error/bug free
