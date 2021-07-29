@@ -12,6 +12,7 @@ import {
 } from '@forgerock/javascript-sdk';
 import { Redirect } from 'react-router-dom';
 
+import LoginViaPlatform from './components/LoginViaPlatform';
 import AreYouHuman from './components/AreYouHuman';
 import UsernameFields from './components/Username';
 import PasswordField from './components/Password';
@@ -41,7 +42,7 @@ function App() {
   });
   const [pw, setPw] = useState('');
   const [error, setError] = useState();
-  const [redirect, setRedirect] = useState(null);
+  const [redirect, setRedirect] = useState(false);
 
   const handleStep = async (step: FRStep | FRLoginFailure | FRLoginSuccess) => {
     if (!step.type) return;
@@ -49,10 +50,14 @@ function App() {
     switch (step.type) {
       case 'LoginSuccess': {
         try {
-          await TokenManager.getTokens({ forceRenew: true });
+          const tokens = await TokenManager.getTokens({
+            forceRenew: true,
+            login: 'redirect',
+          });
+          await TokenManager.getTokens({ query: {} });
           await UserManager.getCurrentUser();
           await OAuth2Client.getUserInfo();
-          return setRedirect(step as unknown as SetStateAction<null>);
+          return setRedirect(true);
         } catch (err) {
           return err;
         }
@@ -78,7 +83,7 @@ function App() {
       .catch(handleFatalError);
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     if (data.callbacks[0].payload.type === 'ChoiceCallback') {
@@ -121,8 +126,6 @@ function App() {
   if (data && !data.callbacks) return <>Logging In...</>;
   if (data && data.callbacks && !data.callbacks.length) return <>Loading...</>;
 
-  console.log(data);
-
   return (
     <div className="App">
       <h1 id="heading">{data.payload.header}</h1>
@@ -133,12 +136,14 @@ function App() {
             data.callbacks
               .map((v: { payload: { type: string } }) => componentMap[v.payload.type](v))
               .reverse()}
-          <button type="submit" className="btn btn-primary">
-            Login
-          </button>
-          <div dangerouslySetInnerHTML={{ __html: data.payload.description }}></div>
         </div>
+        <button type="submit" className="btn btn-primary">
+          Login
+        </button>
+        {<div dangerouslySetInnerHTML={{ __html: data.payload.description }}></div>}
       </form>
+      <h3>Or</h3>
+      <LoginViaPlatform setRedirect={setRedirect} />
     </div>
   );
 }
