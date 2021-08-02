@@ -1,39 +1,47 @@
-import { MouseEventHandler, useEffect } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { TokenManager, UserManager } from '@forgerock/javascript-sdk';
+import { Redirect } from 'react-router-dom';
 
-interface LoginPlatformProps {
-  setRedirect: (a: boolean) => void;
-}
+// interface LoginPlatformProps {
+// }
 
-function LoginViaPlatform({ setRedirect }: LoginPlatformProps): JSX.Element {
+function LoginViaPlatform(): JSX.Element {
+  const [redirect, setRedirect] = useState(false);
   const url = new URL(document.location as unknown as string);
   const params = url.searchParams;
-  const authCode = params.get('code');
-  const state = params.get('state');
-
+  
   const handleLogin: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
-    const tokens = await TokenManager.getTokens({ forceRenew: false, login: 'redirect' });
-    const user = await UserManager.getCurrentUser();
-    console.log('after login calls', { tokens, user });
+    await TokenManager.getTokens({ clientId: 'test-app-central-login', forceRenew: true, login: 'redirect' });
+    await UserManager.getCurrentUser();
   };
 
   useEffect(() => {
     const asyncEffect = async () => {
+    const authCode = params.get('code');
+    const state = params.get('state');
+
       /**
        *  When the user return to this app after successfully logging in,
        * the URL will include code and state query parameters that need to
        * be passed in to complete the OAuth flow giving the user access
        */
-      await TokenManager.getTokens({ query: { code: authCode as string, state: state as string } });
-      await UserManager.getCurrentUser();
-      setRedirect(true);
+      if (authCode && state)  {
+	console.log('here', authCode, state)
+	await TokenManager.getTokens({ 
+	  clientId: 'test-app-central-login', 
+	  forceRenew: true, 
+	  login: 'redirect', 
+	  query: { code: authCode,  state  } 
+	});
+	setRedirect(true);
+      }
     };
 
-    if (authCode && state) asyncEffect();
-  }, [state, authCode]);
+     asyncEffect();
+  }, []);
 
-  return <button onClick={handleLogin}>Login via Platform</button>;
+  return redirect ? <Redirect to="/success" /> : <button onClick={handleLogin}>Login via Platform</button>;
 }
 
 export default LoginViaPlatform;

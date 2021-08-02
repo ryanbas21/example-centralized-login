@@ -12,7 +12,6 @@ import {
 } from '@forgerock/javascript-sdk';
 import { Redirect } from 'react-router-dom';
 
-import LoginViaPlatform from './components/LoginViaPlatform';
 import AreYouHuman from './components/AreYouHuman';
 import UsernameFields from './components/Username';
 import PasswordField from './components/Password';
@@ -54,7 +53,7 @@ function App() {
             forceRenew: true,
             login: 'redirect',
           });
-          await TokenManager.getTokens({ query: {} });
+          await TokenManager.getTokens();
           await UserManager.getCurrentUser();
           await OAuth2Client.getUserInfo();
           return setRedirect(true);
@@ -117,7 +116,7 @@ function App() {
       <UsernameFields key={props.type} username={username} setUsername={setUsername} {...props} />
     ),
     ChoiceCallback: (props: any) => (
-      <AreYouHuman key={props.type} human={human} setHuman={setHuman} {...props} />
+      <AreYouHuman key={props.type} human={human} setHuman={setHuman} {...props} {...props} />
     ),
   };
 
@@ -142,10 +141,6 @@ function App() {
         </button>
         {<span dangerouslySetInnerHTML={{ __html: data.payload.description }}></span>}
       </form>
-      <span>
-	<h3>Or</h3>
-      </span>
-      <LoginViaPlatform setRedirect={setRedirect} />
     </div>
   );
 }

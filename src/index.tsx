@@ -1,16 +1,15 @@
-// import { Config } from '@forgerock/javascript-sdk/lib';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
 
 import Home from './App';
 import Loggedin from './Loggedin';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 import { Config } from '@forgerock/javascript-sdk';
+import LoginViaPlatform from './components/LoginViaPlatform';
 
 Config.set({
-  clientId: 'test-app-central-login',
+  clientId: 'test-app-1',
   support: 'legacy',
   redirectUri: 'https://ryan.example.com:1234/_callback',
   scope: 'openid',
@@ -25,9 +24,20 @@ Config.set({
 const App = () => (
   <Router>
     <Switch>
-      <Route path="/success" render={() => <Loggedin />} />
-      <Route path="/">
+      <Route path="/success">
+	<Loggedin />
+      </Route>
+      <Route path="/embeded">
         <Home />
+      </Route>
+      <Route path="/">
+	<>
+	  <NavLink to="/embeded"> 
+	    <button>Embeded Login</button>
+	  </NavLink> 
+	  <h3>Or</h3>
+	  <LoginViaPlatform />
+	</>
       </Route>
     </Switch>
   </Router>
@@ -39,8 +49,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root'),
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals(console.log);

@@ -6,6 +6,7 @@ interface AreYouHumanProps {
 function AreYouHuman({ human, setHuman, ...props }: AreYouHumanProps & { [key: string]: any }) {
   return (
     <div>
+      <header>{props.payload.output[0].value}</header>
       <label htmlFor={'Yes'}>Yes</label>
       <input
         id="Yes"
