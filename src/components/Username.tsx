@@ -1,3 +1,5 @@
+import { NameCallback } from "@forgerock/javascript-sdk";
+
 interface UsernameProps {
   username: string;
   setUsername: (a: string) => void;
@@ -8,12 +10,13 @@ function UsernameFields({
   setUsername,
   ...props
 }: UsernameProps & { [key: string]: any }) {
+  const name = new NameCallback(props.payload)
   return (
     <span>
       <label className="form-label" htmlFor="username">
-        {props.payload.output[0].value}
+	{name.getOutputValue(0)}
       <input
-        name={props.payload.input[0].name}
+        name={name.getInputValue(0) as string}
         className="form-control"
         type="text"
         id="username"

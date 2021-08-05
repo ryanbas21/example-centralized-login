@@ -1,12 +1,15 @@
+import { ChoiceCallback } from "@forgerock/javascript-sdk";
+
 interface AreYouHumanProps {
   human: number;
   setHuman: any;
 }
 
 function AreYouHuman({ human, setHuman, ...props }: AreYouHumanProps & { [key: string]: any }) {
+  const choice = new ChoiceCallback(props.payload);
   return (
     <div>
-      <header>{props.payload.output[0].value}</header>
+      <header>{choice.getOutputValue(0) as string}</header>
       <label htmlFor={'Yes'}>Yes</label>
       <input
         id="Yes"

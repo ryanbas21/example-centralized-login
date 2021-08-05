@@ -1,17 +1,19 @@
+import { PasswordCallback } from "@forgerock/javascript-sdk";
+
 interface PasswordProps {
   pw: string;
   setPw: (a: string) => void;
 }
 
 function PasswordField({ pw, setPw, ...props }: PasswordProps & { [key: string]: any }) {
-  console.log(props);
+  const pass = new PasswordCallback(props.payload);
   return (
     <>
       <label className="form-label" htmlFor="password">
-        {props.payload.output[0].value}
+        {pass.getOutputValue(0) as string}
       </label>
       <input
-        name={props.payload.input[0].name}
+        name={pass.getInputValue(0) as string}
         className="form-control"
         type="password"
         id="password"
