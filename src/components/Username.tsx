@@ -8,15 +8,14 @@ interface UsernameProps {
 function UsernameFields({
   username,
   setUsername,
-  ...props
-}: UsernameProps & { [key: string]: any }) {
-  const name = new NameCallback(props.payload)
+  cb
+}: UsernameProps & { cb: NameCallback, [key: string]: any }) {
   return (
     <span>
       <label className="form-label" htmlFor="username">
-	{name.getOutputValue(0)}
+	{cb.getPrompt()}
       <input
-        name={name.getInputValue(0) as string}
+        name={cb.getPrompt()}
         className="form-control"
         type="text"
         id="username"

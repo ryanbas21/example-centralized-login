@@ -9,6 +9,10 @@ import {
   TokenManager,
   UserManager,
   CallbackType,
+  FRCallback,
+  ChoiceCallback,
+  NameCallback,
+  PasswordCallback,
 } from '@forgerock/javascript-sdk';
 import { Redirect } from 'react-router-dom';
 
@@ -109,14 +113,14 @@ function App() {
   }, []);
 
   const componentMap: Record<string, (a: any) => JSX.Element> = {
-    PasswordCallback: (props: any) => (
-      <PasswordField key={props.type} pw={pw} setPw={setPw} {...props} />
+    PasswordCallback: (props: PasswordCallback) => (
+      <PasswordField key={props.payload.type} pw={pw} setPw={setPw} cb={props} />
     ),
-    NameCallback: (props: any) => (
-      <UsernameFields key={props.type} username={username} setUsername={setUsername} {...props} />
+    NameCallback: (props: NameCallback) => (
+      <UsernameFields key={props.payload.type} username={username} setUsername={setUsername} cb={props} />
     ),
-    ChoiceCallback: (props: any) => (
-      <AreYouHuman key={props.type} human={human} setHuman={setHuman} {...props} {...props} />
+    ChoiceCallback: (props: ChoiceCallback) => (
+      <AreYouHuman key={props.payload.type} human={human} setHuman={setHuman} {...props} cb={props} />
     ),
   };
 
@@ -133,7 +137,9 @@ function App() {
         <div className="mb-2" id="UsernamePassword">
           {data &&
             data.callbacks
-              .map((v: { payload: { type: string } }) => componentMap[v.payload.type](v))
+              .map((v: { payload: { type: string } }) => {
+		  return componentMap[v.payload.type](v)
+		})
               .reverse()}
         </div>
         <button type="submit" className="btn btn-primary">

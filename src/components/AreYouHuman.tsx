@@ -3,24 +3,26 @@ import { ChoiceCallback } from "@forgerock/javascript-sdk";
 interface AreYouHumanProps {
   human: number;
   setHuman: any;
+  cb: ChoiceCallback;
 }
 
-function AreYouHuman({ human, setHuman, ...props }: AreYouHumanProps & { [key: string]: any }) {
-  const choice = new ChoiceCallback(props.payload);
+function AreYouHuman({ human, setHuman, cb }: AreYouHumanProps & { [key: string]: any }) {
   return (
     <div>
-      <header>{choice.getOutputValue(0) as string}</header>
-      <label htmlFor={'Yes'}>Yes</label>
-      <input
-        id="Yes"
-        checked={!Boolean(human)}
-        type="radio"
-        value={0}
-        onClick={() => setHuman(0)}
-      />
-
-      <label htmlFor={'No'}>No</label>
-      <input id="No" checked={Boolean(human)} type="radio" value={1} onClick={() => setHuman(1)} />
+      <header>{cb.getPrompt()}</header>
+      {console.log(cb.getChoices(), cb.getDefaultChoice())}
+      {cb.getChoices().map((v: string, i: number) => 
+	<>
+	  <label htmlFor={v}>{v}</label>
+	  <input
+	    id={v}
+	    checked={i === cb.getDefaultChoice() ? Boolean(human) : !Boolean(human)}
+	    type="radio"
+	    value={i}
+	    onClick={() => setHuman(i)}
+	  />
+	</>
+      )}
     </div>
   );
 }

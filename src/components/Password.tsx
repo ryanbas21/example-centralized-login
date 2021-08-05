@@ -5,15 +5,14 @@ interface PasswordProps {
   setPw: (a: string) => void;
 }
 
-function PasswordField({ pw, setPw, ...props }: PasswordProps & { [key: string]: any }) {
-  const pass = new PasswordCallback(props.payload);
+function PasswordField({ pw, setPw, cb }: PasswordProps & { cb: PasswordCallback, [key: string]: any }) {
   return (
     <>
       <label className="form-label" htmlFor="password">
-        {pass.getOutputValue(0) as string}
+        {cb.getPrompt() as string}
       </label>
       <input
-        name={pass.getInputValue(0) as string}
+        name={cb.getPrompt()}
         className="form-control"
         type="password"
         id="password"
